@@ -16,6 +16,7 @@ env:
 
 jobs:
   build-and-deploy:
+    if: ${{ github.repository == 'logseq/logseq' }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
