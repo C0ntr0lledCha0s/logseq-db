@@ -113,7 +113,7 @@
     "cljs:dev-release-electron": "clojure -M:cljs release app db-worker db-worker-node electron --debug --config-merge \"{:closure-defines {frontend.config/DEV-RELEASE true}}\" && clojure -M:cljs release publishing",
     "cljs:debug": "clojure -M:cljs release app db-worker db-worker-node --debug",
     "cljs:report": "clojure -M:cljs run shadow.cljs.build-report app db-worker db-worker-node report.html",
-    "cljs:build-electron": "clojure -A:cljs compile app db-worker db-worker-node electron",
+    "cljs:build-electron": "clojure -M:cljs compile app db-worker db-worker-node electron",
     "cljs:lint": "clojure -M:clj-kondo --parallel --lint src --cache false",
     "ios:dev": "cross-env PLATFORM=ios gulp cap",
     "android:dev": "cross-env PLATFORM=android gulp cap"

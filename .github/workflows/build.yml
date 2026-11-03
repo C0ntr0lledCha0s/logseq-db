@@ -77,7 +77,7 @@ jobs:
 
       - name: Fetch Clojure deps
         if: steps.clojure-deps.outputs.cache-hit != 'true'
-        run: clojure -A:cljs -P
+        run: clojure -P -M:cljs
 
       - name: Fetch pnpm deps
         run: pnpm install --frozen-lockfile
@@ -146,7 +146,7 @@ jobs:
 
       - name: Fetch Clojure deps
         if: steps.clojure-deps.outputs.cache-hit != 'true'
-        run: clojure -A:cljs -P
+        run: clojure -P -M:cljs
 
       - name: Fetch OCaml deps
         working-directory: cli

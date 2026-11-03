@@ -78,7 +78,7 @@ jobs:
 
       - name: Fetch Clojure deps
         if: steps.clojure-deps.outputs.cache-hit != 'true'
-        run: clojure -A:test -P
+        run: clojure -P -M:test
 
       - name: Fetch pnpm deps
         run: pnpm install --frozen-lockfile --ignore-workspace

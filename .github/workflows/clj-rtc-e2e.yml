@@ -71,7 +71,7 @@ jobs:
 
       - name: Fetch Clojure deps
         if: steps.clojure-deps.outputs.cache-hit != 'true'
-        run: clojure -A:cljs -P
+        run: clojure -P -M:cljs
 
       - name: Shadow-cljs cache
         uses: actions/cache@v4

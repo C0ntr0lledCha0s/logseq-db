@@ -80,7 +80,7 @@ jobs:
 
       - name: Fetch Clojure deps
         if: steps.clojure-deps.outputs.cache-hit != 'true'
-        run: clojure -A:test -P
+        run: clojure -P -M:test
 
       - name: Run ClojureScript tests
         run: clojure -M:test

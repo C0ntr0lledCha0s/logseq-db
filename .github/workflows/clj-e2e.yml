@@ -71,7 +71,7 @@ jobs:
       - name: Fetch Clojure deps
         if: steps.clojure-deps.outputs.cache-hit != 'true'
         run: |
-          clojure -A:cljs -P
+          clojure -P -M:cljs
           cd clj-e2e && clojure -P -M:test
 
       - name: Shadow-cljs cache
