@@ -8,7 +8,7 @@
                    :modules {:main {:exports {default logseq.publish.worker/worker
                                               PublishMetaDO logseq.publish.worker/PublishMetaDO}}}
                    :js-options {:js-provider :import}
-                   :closure-defines {shadow.cljs.devtools.client.env/enabled false}
+                   :dev {:closure-defines {shadow.cljs.devtools.client.env/enabled false}}
                    :devtools {:enabled false}}
   :publish-test {:target :node-test
                  :output-to "worker/dist/worker-test.js"

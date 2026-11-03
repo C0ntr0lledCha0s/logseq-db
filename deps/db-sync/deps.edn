@@ -1,4 +1,4 @@
-{:paths ["src" "test" "../../resources"]
+{:paths ["src" "test"]
  :deps
  {org.clojure/clojure                   {:mvn/version "1.12.4"}
   datascript/datascript                 {:git/url "https://github.com/logseq/datascript"

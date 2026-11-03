@@ -255,21 +255,13 @@
          #"Cycle detected in :build/class-extends"
          (sqlite-build/build-blocks-tx
           {:classes {:user.class/A {:build/class-extends [:user.class/A]}}}))))
-  (testing "deprecated class parent self cycle"
+  (testing "removed class parent key is rejected"
     (is (thrown-with-msg?
          js/Error
-         #"Cycle detected in :build/class-extends"
+         #":build/class-parent has been removed"
          (sqlite-build/build-blocks-tx
-          {:classes {:user.class/A {:build/class-parent :user.class/A}}}))))
-  (testing "deprecated class parent takes precedence"
-    (let [txs (sqlite-build/build-blocks-tx
-               {:classes {:user.class/A {:build/class-parent :user.class/B
-                                         :build/class-extends [:user.class/A]}
-                          :user.class/B {}}})
-          class-a (some #(when (= :user.class/A (:db/ident %)) %) (:init-tx txs))
-          class-b (some #(when (= :user.class/B (:db/ident %)) %) (:init-tx txs))]
-      (is (= [(:db/id class-b)]
-             (:logseq.property.class/extends class-a)))))
+          {:classes {:user.class/A {:build/class-parent :user.class/B}
+                     :user.class/B {}}}))))
   (testing "multi-class cycle"
     (is (thrown-with-msg?
          js/Error

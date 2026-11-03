@@ -11,8 +11,8 @@
             :modules {:main {:exports {default logseq.db-sync.worker/worker
                                        SyncDO logseq.db-sync.worker/SyncDO}}}
             :js-options {:js-provider :import}
-            :closure-defines {shadow.cljs.devtools.client.env/enabled false
-                              goog.debug.LOGGING_ENABLED true}
+            :closure-defines {goog.debug.LOGGING_ENABLED true}
+            :dev {:closure-defines {shadow.cljs.devtools.client.env/enabled false}}
             :devtools {:enabled false}}
   :db-sync-node {:target :node-script
                  :output-to "worker/dist/node-adapter.js"

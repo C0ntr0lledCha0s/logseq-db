@@ -400,14 +400,11 @@
                        {:db/ident ident :block/order order}))))]
     (into new-properties-tx existing-property-orders-tx)))
 
-(defn- effective-class-extends
-  [{:build/keys [class-parent class-extends]}]
-  (if class-parent [class-parent] class-extends))
-
 (defn- build-class-extends [class-config class-db-ids]
-  (when (:build/class-parent class-config)
-    (println "Warning: :build/class-parent is deprecated and will be removed soon."))
-  (when-let [class-extends' (effective-class-extends class-config)]
+  (when (contains? class-config :build/class-parent)
+    (throw (ex-info ":build/class-parent has been removed, use :build/class-extends"
+                    {:class-config class-config})))
+  (when-let [class-extends' (:build/class-extends class-config)]
     (mapv (fn [c]
             (or (class-db-ids c)
                 (if (db-malli-schema/class? c)
@@ -418,7 +415,7 @@
 (defn- validate-class-extends-acyclic!
   [classes all-idents]
   (when (some (fn [[_ class-config]]
-                (seq (effective-class-extends class-config)))
+                (seq (:build/class-extends class-config)))
               classes)
     (let [class-idents (set (map #(get-ident all-idents %) (keys classes)))
           edges (->> classes
@@ -428,7 +425,7 @@
                                          (let [parent-ident (get-ident all-idents parent)]
                                            (when (contains? class-idents parent-ident)
                                              [class-ident parent-ident])))
-                                       (effective-class-extends class-config))))))
+                                       (:build/class-extends class-config))))))
           [outgoing incoming-counts]
           (reduce (fn [[outgoing counts] [class-ident parent-ident]]
                     [(update outgoing class-ident (fnil conj []) parent-ident)
@@ -489,7 +486,7 @@
                            (conj
                             (merge
                              new-block
-                             (dissoc class-m :build/properties :build/class-extends :build/class-parent :build/class-properties :build/keep-uuid?)
+                             (dissoc class-m :build/properties :build/class-extends :build/class-properties :build/keep-uuid?)
                              (when-let [props (not-empty (:build/properties class-m))]
                                (->block-properties (merge props (db-property-build/build-properties-with-ref-values pvalue-tx-m))
                                                    uuid-maps all-idents options))
