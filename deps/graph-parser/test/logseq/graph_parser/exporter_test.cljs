@@ -486,6 +486,32 @@
     (is (empty? (:errors (db-validate/validate-local-db! db)))
         "Imported graph validates")))
 
+(deftest-async import-property-named-like-existing-property
+  (p/let [file (write-temp-graph-file "pages/source.md" "url:: https://example.com\n\n- Example block\n")
+          conn (db-test/create-conn-with-blocks
+                {:properties {:user.property/url {:logseq.property/type :url :block/title "url"}}})
+          _ (db-pipeline/add-listener conn)
+          _ (import-files-to-db [file] conn {})
+          db @conn]
+    (is (= :url (:logseq.property/type (d/entity db :user.property/url)))
+        "The existing property keeps its ident")
+    (is (empty? (:errors (db-validate/validate-local-db! db)))
+        "Imported graph validates")))
+
+(deftest-async import-property-named-like-existing-class
+  (p/let [file (write-temp-graph-file "pages/source.md" "language:: en-US\n\n- Example block\n")
+          conn (db-test/create-conn-with-blocks {:classes {:user.class/Language {:block/title "Language"}}})
+          _ (db-pipeline/add-listener conn)
+          _ (import-files-to-db [file] conn {})
+          db @conn
+          property (d/entity db (first (d/q '[:find [?e ...] :where [?e :block/title "language"] [?e :logseq.property/type]] db)))]
+    (is (some? property) "The property is imported as its own entity")
+    (is (= "en-US" (some-> (get (db-test/find-page-by-title db "source") (:db/ident property))
+                           db-property/property-value-content))
+        "The page keeps its property value")
+    (is (empty? (:errors (db-validate/validate-local-db! db)))
+        "Imported graph validates")))
+
 (deftest-async import-org-page-title-when-property-appears-in-middle
   (p/let [file (write-temp-graph-file
                 "pages/20230410145300-end_to_end_note.org"
