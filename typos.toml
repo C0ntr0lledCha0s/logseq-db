@@ -31,4 +31,5 @@ extend-exclude = ["resources/*",
                   "*.pbxproj",
                   "*.storyboard",
                   "pnpm-lock.yaml",
-                  "deps/db-sync/worker/logseq_icon.mjs"]
+                  "deps/db-sync/worker/logseq_icon.mjs",
+                  "src/test/migration/*.transit"]
