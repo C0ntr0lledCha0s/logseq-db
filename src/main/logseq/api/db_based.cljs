@@ -108,7 +108,7 @@
        (when (= block-uuid (some-> (state/get-edit-block) :block/uuid))
          (state/set-edit-content! content))))))
 
-(defn get-property
+(defn ^{:jsdoc ["@nocollapse"]} get-property
   [k]
   (this-as this
            (p/let [prop (-get-property this k)
@@ -160,7 +160,7 @@
                                                   (assoc opts :property-name k'))]
     (<get-block (:db/id p))))
 
-(defn upsert-property
+(defn ^{:jsdoc ["@nocollapse"]} upsert-property
   "schema:
     {:type :default | :number | :date | :datetime | :checkbox | :url | :node | :asset | :json | :string
      :cardinality :many | :one
@@ -177,7 +177,7 @@
              property (upsert-property-aux this k schema' opts')]
        (sdk-utils/result->js property)))))
 
-(defn remove-property
+(defn ^{:jsdoc ["@nocollapse"]} remove-property
   [k]
   (this-as
    this
@@ -234,7 +234,7 @@
                         (:db/id class))]
           (sdk-utils/result->js result))))))
 
-(defn create-tag [title ^js opts]
+(defn ^{:jsdoc ["@nocollapse"]} create-tag [title ^js opts]
   (this-as this
            (when-not (string? title)
              (throw (ex-info "Tag title should be a string" {:title title})))
@@ -320,7 +320,7 @@
 (defn- get-tags [name]
   (db-async/<get-tags-by-name (state/get-current-repo) name))
 
-(defn get-tag [class-uuid-or-ident-or-title]
+(defn ^{:jsdoc ["@nocollapse"]} get-tag [class-uuid-or-ident-or-title]
   (this-as this
            (p/let [eid (resolve-tag-eid this class-uuid-or-ident-or-title)
                    tag (<get-block eid)
@@ -333,7 +333,7 @@
   (p/let [tags (get-tags name)]
     (sdk-utils/result->js tags)))
 
-(defn tag-add-property [tag-id property-id-or-name]
+(defn ^{:jsdoc ["@nocollapse"]} tag-add-property [tag-id property-id-or-name]
   (this-as this
            (p/let [tag (db-async/<get-case-page (state/get-current-repo) tag-id)
                    eid (resolve-property-eid this property-id-or-name)
@@ -359,7 +359,7 @@
      (p/let [tag (db-async/<get-case-page repo tag-id)]
        (sdk-utils/result->js tag)))))
 
-(defn add-block-tag [id-or-name tag-id]
+(defn ^{:jsdoc ["@nocollapse"]} add-block-tag [id-or-name tag-id]
   (this-as this
            (p/let [repo (state/get-current-repo)
                    block (db-async/<get-block repo id-or-name)
@@ -372,7 +372,7 @@
              (when (and tag block)
                (db-page-handler/add-tag repo (:db/id block) tag)))))
 
-(defn remove-block-tag [id-or-name tag-id]
+(defn ^{:jsdoc ["@nocollapse"]} remove-block-tag [id-or-name tag-id]
   (this-as this
            (p/let [repo (state/get-current-repo)
                    block (db-async/<get-block repo id-or-name)

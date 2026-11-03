@@ -136,7 +136,7 @@
          (sort-by :block/title)
          sdk-utils/result->js)))
 
-(defn create_page
+(defn ^{:jsdoc ["@nocollapse"]} create_page
   [name ^js properties ^js opts]
   (this-as
    this
@@ -255,7 +255,7 @@
               (db-async/<get-block repo page-uuid))]
     block))
 
-(defn insert_block
+(defn ^{:jsdoc ["@nocollapse"]} insert_block
   [id content ^js opts]
   (this-as this
            (p/let [block (<get-block id)]
@@ -292,7 +292,7 @@
                               :ordered-list? (if (boolean? autoOrderedList) autoOrderedList false)}]
                  (db-based-api/insert-block this content properties schema opts'))))))
 
-(def insert_batch_block
+(def ^{:jsdoc ["@nocollapse"]} insert_batch_block
   (fn [block-uuid ^js batch-blocks-js ^js opts-js]
     (this-as
      this
@@ -311,7 +311,7 @@
         (editor-handler/delete-block-aux!
          {:block/uuid block-uuid :repo repo})))))
 
-(def update_block
+(def ^{:jsdoc ["@nocollapse"]} update_block
   (fn [id content ^js opts]
     (this-as
      this
@@ -476,7 +476,7 @@
     (export-handler/export-repo-as-zip! repo)))
 
 ;; block properties
-(defn upsert_block_property
+(defn ^{:jsdoc ["@nocollapse"]} upsert_block_property
   [id key ^js value ^js options]
   (this-as this
            (p/let [opts (bean/->clj options)
@@ -488,7 +488,7 @@
              (when block
                (db-based-api/upsert-block-property this block key value opts)))))
 
-(defn remove_block_property
+(defn ^{:jsdoc ["@nocollapse"]} remove_block_property
   [id key]
   (this-as this
            (p/let [block (<get-block id {:children? false})]
@@ -516,7 +516,7 @@
   ;; cljs-bean does not convert ClojureScript sets to plain JavaScript values.
   (sdk-utils/result->js (if (set? value) (vec value) value)))
 
-(defn get_block_property
+(defn ^{:jsdoc ["@nocollapse"]} get_block_property
   [id key]
   (this-as this
     (p/let [properties (get-all-block-properties id)]
