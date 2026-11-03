@@ -1330,10 +1330,10 @@
             (p/do!
              ;; Zoom/root load path used to omit :container-id, which wrote false
              ;; onto the current editor/parent container via resolve-container-id.
-             (editor/expand-block! block-id {:skip-db-collpsing? true})
+             (editor/expand-block! block-id {:skip-db-collapsing? true})
              (is (nil? (state/get-block-collapsed block-id parent-container))
                  "skip-db expand without a container must not write the editor container")
-             (editor/expand-block! block-id {:skip-db-collpsing? true
+             (editor/expand-block! block-id {:skip-db-collapsing? true
                                              :container-id zoom-container})
              (state/set-collapsed-block! block-id false zoom-container)
              (is (false? (state/get-block-collapsed block-id zoom-container)))

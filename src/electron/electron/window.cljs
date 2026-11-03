@@ -55,7 +55,7 @@
                       :webSecurity             (not dev?)
                       :contextIsolation        true
                        ;; Remove OverlayScrollbars and transition `.scrollbar-spacing`
-                       ;; to use `scollbar-gutter` after the feature is implemented in browsers.
+                       ;; to use `scrollbar-gutter` after the feature is implemented in browsers.
                       :enableBlinkFeatures     'OverlayScrollbars'
                       :preload                 (node-path/join js/__dirname "js/preload.js")}}
 
