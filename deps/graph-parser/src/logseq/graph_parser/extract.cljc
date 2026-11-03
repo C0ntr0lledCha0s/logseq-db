@@ -321,11 +321,17 @@
                   (assoc :block/uuid (d/squuid))))))))
 
 (defn with-ref-pages
+  "Adds pages referenced by blocks. References are merged over a page parsed from
+  the file, except :block/tags, which keeps the tags of both, so a page that
+  references itself keeps its own tags."
   [pages blocks]
   (let [ref-pages (->> (mapcat :block/refs blocks)
                        (filter :block/name))]
     (->> (concat pages ref-pages)
          (group-by :block/name)
          vals
-         (map (partial apply merge))
+         (map (fn [same-pages]
+                (let [tags (distinct (mapcat :block/tags same-pages))]
+                  (cond-> (apply merge same-pages)
+                    (seq tags) (assoc :block/tags (vec tags))))))
          (with-block-uuid))))

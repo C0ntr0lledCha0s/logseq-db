@@ -512,6 +512,15 @@
     (is (empty? (:errors (db-validate/validate-local-db! db)))
         "Imported graph validates")))
 
+(deftest-async import-page-referencing-itself-keeps-its-class-tag
+  (p/let [file (write-temp-graph-file "pages/Proj Page.md" "tags:: Project\n\n- see [[Proj Page]]\n")
+          conn (db-test/create-conn)
+          _ (db-pipeline/add-listener conn)
+          _ (import-files-to-db [file] conn {:tag-classes ["Project"]})
+          page (db-test/find-page-by-title @conn "Proj Page")]
+    (is (= ["Project"] (keep #(when-not (= :logseq.class/Page (:db/ident %)) (:block/title %)) (:block/tags page)))
+        "A page tagged with a class keeps the tag when one of its blocks references the page")))
+
 (deftest-async import-org-page-title-when-property-appears-in-middle
   (p/let [file (write-temp-graph-file
                 "pages/20230410145300-end_to_end_note.org"
