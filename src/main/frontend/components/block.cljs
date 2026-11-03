@@ -4507,7 +4507,7 @@
   [block-id v container-id]
   (if (false? v)
     (do
-      (editor-handler/expand-block! block-id {:skip-db-collpsing? true
+      (editor-handler/expand-block! block-id {:skip-db-collapsing? true
                                               :container-id container-id})
       (state/set-collapsed-block! block-id v container-id))
     (state/set-collapsed-block! block-id v container-id)))

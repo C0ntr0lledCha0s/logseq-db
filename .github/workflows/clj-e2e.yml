@@ -31,15 +31,15 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
@@ -47,19 +47,19 @@ jobs:
             pnpm-lock.yaml
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Set up Clojure
-        uses: DeLaGuardo/setup-clojure@13.5
+        uses: DeLaGuardo/setup-clojure@6d46099eae24853c33c0482f2bb54edf4f1a4c74 # 13.7.0
         with:
           cli: ${{ env.CLOJURE_VERSION }}
           bb: ${{ env.BABASHKA_VERSION }}
 
       - name: Clojure cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: clojure-deps
         with:
           path: |
@@ -71,11 +71,11 @@ jobs:
       - name: Fetch Clojure deps
         if: steps.clojure-deps.outputs.cache-hit != 'true'
         run: |
-          clojure -A:cljs -P
+          clojure -P -M:cljs
           cd clj-e2e && clojure -P -M:test
 
       - name: Shadow-cljs cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .shadow-cljs
           # ensure update cache every time
@@ -95,7 +95,7 @@ jobs:
           pnpm gulp:build && clojure -M:cljs release app db-worker --config-merge "{:closure-defines {frontend.config/DEV-RELEASE true frontend.worker.handler.transaction/OUTLINER-PERF-LOGGING true}}" --debug && pnpm webpack-app-build
 
       - name: Upload E2E test build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: static-build
           path: static/
@@ -143,22 +143,22 @@ jobs:
               logseq.e2e.import-basic-test
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Set up Clojure
-        uses: DeLaGuardo/setup-clojure@13.5
+        uses: DeLaGuardo/setup-clojure@6d46099eae24853c33c0482f2bb54edf4f1a4c74 # 13.7.0
         with:
           cli: ${{ env.CLOJURE_VERSION }}
           bb: ${{ env.BABASHKA_VERSION }}
 
       - name: Clojure cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.m2/repository
@@ -167,20 +167,20 @@ jobs:
           restore-keys: ${{ runner.os }}-clojure-deps-
 
       - name: Download E2E test build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static-build
           path: static
 
       - name: Set up Node
         if: matrix.shard == 'outliner-rtc'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
         if: matrix.shard == 'outliner-rtc'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
@@ -208,7 +208,7 @@ jobs:
 
       - name: Collect screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-screenshots-${{ matrix.shard }}
           path: clj-e2e/e2e-dump/*
@@ -224,7 +224,7 @@ jobs:
         run: echo "E2E OK" > e2e-success.txt
 
       - name: Upload success artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: e2e-success
           path: e2e-success.txt

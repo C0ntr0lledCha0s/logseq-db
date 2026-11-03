@@ -3878,17 +3878,17 @@
        (set-blocks-collapsed! [block-id] true))
      (state/set-collapsed-block! block-id true (or container-id (current-editor-container-id))))))
 
-(defn expand-block! [block-id & {:keys [skip-db-collpsing? container-id]}]
+(defn expand-block! [block-id & {:keys [skip-db-collapsing? container-id]}]
   (let [repo (state/get-current-repo)]
     (p/do!
      (db-async/<get-block repo block-id {:include-collapsed-children? true})
-     (when-not (or skip-db-collpsing? (skip-collapsing-in-db?))
+     (when-not (or skip-db-collapsing? (skip-collapsing-in-db?))
        (set-blocks-collapsed! [block-id] false))
      (cond
        ;; Display-only expand (zoom/root load) must stay on the given container.
        ;; Falling back to the current editor container writes `:ui/collapsed-blocks`
        ;; onto the parent page, so the subtree stays open after navigate-back.
-       skip-db-collpsing?
+       skip-db-collapsing?
        (when container-id
          (state/set-collapsed-block! block-id false container-id))
 

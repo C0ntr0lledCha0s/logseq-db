@@ -18,6 +18,7 @@ deleteable = "deleteable"
 fom = "fom"
 tne = "tne"
 Damon = "Damon"
+fnd = "fnd"         # Footnote anchor ids in HTML export
 [files]
 extend-exclude = ["resources/*",
                   "src/resources/*",
@@ -25,4 +26,10 @@ extend-exclude = ["resources/*",
                   "src/test/fixtures/*",
                   "deps/db-sync/test/logseq/db_sync/fixtures/*.edn",
                   "clj-e2e/resources/*",
-                  "deps/common/src/logseq/common/plural.cljs"]
+                  "deps/common/src/logseq/common/plural.cljs",
+                  # Generated files: Xcode object ids, lockfile hashes, base64 assets
+                  "*.pbxproj",
+                  "*.storyboard",
+                  "pnpm-lock.yaml",
+                  "deps/db-sync/worker/logseq_icon.mjs",
+                  "src/test/migration/*.transit"]

@@ -70,17 +70,17 @@ jobs:
           exit 1
 
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.inputs.git-ref }}
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
@@ -89,7 +89,7 @@ jobs:
         run: echo "dir=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
 
       - name: Cache pnpm store directory
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: pnpm-cache
         with:
           path: ${{ steps.pnpm-store-dir-path.outputs.dir }}
@@ -98,13 +98,13 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Cache clojure deps
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.m2/repository
@@ -112,7 +112,7 @@ jobs:
           key: ${{ runner.os }}-clojure-lib-${{ hashFiles('**/deps.edn') }}
 
       - name: Setup clojure
-        uses: DeLaGuardo/setup-clojure@13.5
+        uses: DeLaGuardo/setup-clojure@6d46099eae24853c33c0482f2bb54edf4f1a4c74 # 13.7.0
         with:
           cli: ${{ env.CLOJURE_VERSION }}
 
@@ -215,7 +215,7 @@ jobs:
           SENTRY_PROJECT: logseq
 
       - name: Cache Static File
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: static
           path: |
@@ -229,7 +229,7 @@ jobs:
     needs: [ compile-cljs ]
     steps:
       - name: Download The Static Asset
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static
           path: .
@@ -241,17 +241,17 @@ jobs:
           echo "version=$pkgver" >> $GITHUB_OUTPUT
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
       # - name: Cache Node Modules
-      #   uses: actions/cache@v4
+      #   uses: actions/cache@v6
       #   with:
       #     path: |
       #       **/node_modules
@@ -279,7 +279,7 @@ jobs:
           mv static/dist/*.zip            ./builds/Logseq-linux-x86_64-${{ steps.ref.outputs.version }}.zip
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: logseq-linux-x64-builds
           path: builds
@@ -289,7 +289,7 @@ jobs:
     needs: [ compile-cljs ]
     steps:
       - name: Download The Static Asset
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static
           path: .
@@ -301,12 +301,12 @@ jobs:
           echo "version=$pkgver" >> $GITHUB_OUTPUT
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
@@ -340,7 +340,7 @@ jobs:
           mv static/dist/*.zip                  ./builds/Logseq-linux-arm64-${{ steps.ref.outputs.version }}.zip
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: logseq-linux-arm64-builds
           path: builds
@@ -350,7 +350,7 @@ jobs:
     needs: [ compile-cljs ]
     steps:
       - name: Download The Static Asset
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static
           path: .
@@ -360,17 +360,17 @@ jobs:
         run: echo "version=$(cat ./static/VERSION)" >> $env:GITHUB_OUTPUT
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
       # - name: Cache Node Modules
-      #   uses: actions/cache@v4
+      #   uses: actions/cache@v6
       #   with:
       #    path: |
       #      **/node_modules
@@ -418,7 +418,7 @@ jobs:
           mv static\dist\*.zip        builds\Logseq-win-x64-${{ steps.ref.outputs.version }}.zip
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: logseq-win-x64-builds
           path: builds
@@ -428,7 +428,7 @@ jobs:
     needs: [ compile-cljs ]
     steps:
       - name: Download The Static Asset
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static
           path: .
@@ -438,17 +438,17 @@ jobs:
         run: echo "version=$(cat ./static/VERSION)" >> $env:GITHUB_OUTPUT
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
       # - name: Cache Node Modules
-      #   uses: actions/cache@v4
+      #   uses: actions/cache@v6
       #   with:
       #    path: |
       #      **/node_modules
@@ -496,7 +496,7 @@ jobs:
           mv static\dist\*.zip        builds\Logseq-win-arm64-${{ steps.ref.outputs.version }}.zip
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: logseq-win-arm64-builds
           path: builds
@@ -506,7 +506,7 @@ jobs:
     runs-on: macos-15-intel
     steps:
       - name: Download The Static Asset
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static
           path: .
@@ -521,17 +521,17 @@ jobs:
         run: ls -al ./static
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
       - name: Install Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
@@ -539,7 +539,7 @@ jobs:
         id: pnpm-store-dir-path
         run: echo "dir=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
       - name: Cache pnpm store directory
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: pnpm-cache
         with:
           path: ${{ steps.pnpm-store-dir-path.outputs.dir }}
@@ -549,13 +549,13 @@ jobs:
 
       - name: Signing By Apple Developer ID
         if: ${{ github.repository == 'logseq/logseq' }}
-        uses: apple-actions/import-codesign-certs@v1
+        uses: apple-actions/import-codesign-certs@288b8ec97b82c66b6f2a6baaf7acc8dfbcbe331c # v7.2.0
         with:
           p12-file-base64: ${{ secrets.APPLE_CERTIFICATES_P12 }}
           p12-password: ${{ secrets.APPLE_CERTIFICATES_P12_PASSWORD }}
 
       # - name: Cache Node Modules
-      #   uses: actions/cache@v4
+      #   uses: actions/cache@v6
       #   with:
       #     path: |
       #       **/node_modules
@@ -582,7 +582,7 @@ jobs:
           mv static/dist/latest-mac.yml  ./builds/latest-x64-mac.yml
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: logseq-darwin-x64-builds
           path: builds
@@ -592,7 +592,7 @@ jobs:
     runs-on: macos-14
     steps:
       - name: Download The Static Asset
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static
           path: .
@@ -604,12 +604,12 @@ jobs:
           echo "version=$pkgver" >> $GITHUB_OUTPUT
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
@@ -617,7 +617,7 @@ jobs:
         id: pnpm-store-dir-path
         run: echo "dir=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
       - name: Cache pnpm store directory
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         id: pnpm-cache
         with:
           path: ${{ steps.pnpm-store-dir-path.outputs.dir }}
@@ -626,19 +626,19 @@ jobs:
             ${{ runner.os }}-arm64-pnpm-
 
       - name: Install Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
       - name: Signing By Apple Developer ID
         if: ${{ github.repository == 'logseq/logseq' }}
-        uses: apple-actions/import-codesign-certs@v1
+        uses: apple-actions/import-codesign-certs@288b8ec97b82c66b6f2a6baaf7acc8dfbcbe331c # v7.2.0
         with:
           p12-file-base64: ${{ secrets.APPLE_CERTIFICATES_P12 }}
           p12-password: ${{ secrets.APPLE_CERTIFICATES_P12_PASSWORD }}
 
       # - name: Cache Node Modules
-      #   uses: actions/cache@v4
+      #   uses: actions/cache@v6
       #   with:
       #     path: |
       #       **/node_modules
@@ -669,7 +669,7 @@ jobs:
           mv static/dist/latest-mac.yml  ./builds/latest-arm64-mac.yml
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: logseq-darwin-arm64-builds
           path: builds
@@ -693,43 +693,43 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Download MacOS x64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-darwin-x64-builds
           path: ./
 
       - name: Download MacOS arm64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-darwin-arm64-builds
           path: ./
 
       - name: Download The Linux x64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-linux-x64-builds
           path: ./
 
       - name: Download The Linux arm64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-linux-arm64-builds
           path: ./
 
       - name: Download The Windows Artifact x64
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-win-x64-builds
           path: ./
 
       - name: Download The Windows Artifact arm64
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-win-arm64-builds
           path: ./
 
       - name: Download Android Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-android-builds
           path: ./
@@ -775,43 +775,43 @@ jobs:
       version: ${{ steps.ref.outputs.version }}
     steps:
       - name: Download MacOS x64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-darwin-x64-builds
           path: ./
 
       - name: Download MacOS arm64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-darwin-arm64-builds
           path: ./
 
       - name: Download The Linux x64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-linux-x64-builds
           path: ./
 
       - name: Download The Linux arm64 Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-linux-arm64-builds
           path: ./
 
       - name: Download The Windows Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-win-x64-builds
           path: ./
 
       - name: Download The Windows Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: logseq-win-arm64-builds
           path: ./
 
       - name: Download Android Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         if: ${{ github.event_name == 'schedule' || github.event.inputs.build-android == 'true' }}
         with:
           name: logseq-android-builds
@@ -835,7 +835,7 @@ jobs:
           cat SHA256SUMS.txt
 
       - name: Create Release Draft
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -906,18 +906,18 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish-linux-stores == 'true' && (github.event.inputs.build-target == 'beta' || github.event.inputs.build-target == 'stable') }}
     steps:
       - name: Download The Static Asset
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: static
           path: .
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
           version: 10.33.0
 
